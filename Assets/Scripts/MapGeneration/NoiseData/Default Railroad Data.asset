@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7255d198b1104b8b829fc2426a160eb9, type: 3}
+  m_Name: Default Railroad Data
+  m_EditorClassIdentifier: 
+  autoUpdate: 1
+  Width: 42
+  Height: 1.16
+  Normalization: 1
+  Flatness: 1
+  FlatSize: 0
+  RailStart: 196
+  Turn: 1
+  TurnDistance: 44

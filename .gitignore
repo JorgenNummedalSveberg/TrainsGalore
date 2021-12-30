@@ -1,0 +1,10 @@
+.idea/
+*.csproj
+Build*
+Library/
+Logs/
+Packages/
+Temp/
+*.sln
+obj/
+WebGL*
