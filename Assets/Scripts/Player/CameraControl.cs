@@ -23,7 +23,6 @@ public class CameraControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
         float[] distances = new float[32];
         distances[6] = treeClippingPlane;
         cam.layerCullDistances = distances;

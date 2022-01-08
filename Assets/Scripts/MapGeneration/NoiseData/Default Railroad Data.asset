@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Default Railroad Data
   m_EditorClassIdentifier: 
   autoUpdate: 1
-  Width: 42
+  Width: 10
   Height: 1.16
-  Normalization: 1
+  Normalization: 0
   Flatness: 1
-  FlatSize: 0
-  RailStart: 196
+  FlatSize: 1
+  RailStart: 116
   Turn: 1
-  TurnDistance: 44
+  TurnDistance: 40

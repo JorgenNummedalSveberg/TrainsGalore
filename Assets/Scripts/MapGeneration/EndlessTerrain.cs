@@ -6,7 +6,7 @@ using UnityEngine;
 public class EndlessTerrain : MonoBehaviour
 {
     public static EndlessTerrain Current;
-    
+
     private const float ViewerMoveThreshold = 25f;
     private const float SqrViewerMoveThreshold = ViewerMoveThreshold * ViewerMoveThreshold;
     
@@ -30,6 +30,10 @@ public class EndlessTerrain : MonoBehaviour
     public int meshGenProgress;
     public int treeGenProgress;
     public bool isDone;
+    public bool drawChunkOutline;
+    public KeyCode chunkBorderKey;
+
+    
     
     private void Awake()
     {
@@ -47,8 +51,10 @@ public class EndlessTerrain : MonoBehaviour
         UpdateVisibleChunks();
     }
 
+
     private void Update()
     {
+        
         ViewerPosition = new Vector2(viewer.position.x, viewer.position.z)/_mapGenerator.TerrainData.uniformScale;
         if ((_viewerPositionOld - ViewerPosition).sqrMagnitude > SqrViewerMoveThreshold)
         {
@@ -61,6 +67,18 @@ public class EndlessTerrain : MonoBehaviour
         if (chunkAddProgress == chunkCount && meshGenProgress == chunkCount && treeGenProgress == chunkCount)
         {
             isDone = true;
+        }
+
+        if (Input.GetKeyDown(chunkBorderKey))
+        {
+            drawChunkOutline = !drawChunkOutline;
+        }
+        if (drawChunkOutline)
+        {
+            foreach (TerrainChunk chunk in _loadedChunks)
+            {
+                chunk.DrawChunkOutlines();
+            }
         }
     }
 
@@ -220,6 +238,28 @@ public class EndlessTerrain : MonoBehaviour
             
         }
 
+        public void DrawChunkOutlines()
+        {
+            int _chunkSize = 2400;
+            Vector2 position = _position*10;
+            Debug.DrawLine(new Vector3(-_chunkSize/2f+ position.x, _chunkSize/2f, -_chunkSize/2f+ position.y), new Vector3(_chunkSize/2f+ position.x, _chunkSize/2f, -_chunkSize/2f+ position.y), Color.red);
+            Debug.DrawLine(new Vector3(-_chunkSize/2f+ position.x, _chunkSize/2f, -_chunkSize/2f+ position.y), new Vector3(-_chunkSize/2f+ position.x, _chunkSize/2f, _chunkSize/2f+ position.y), Color.red);
+          
+            Debug.DrawLine(new Vector3(-_chunkSize/2f+ position.x, 0, -_chunkSize/2f+ position.y), new Vector3(_chunkSize/2f+ position.x, 0, -_chunkSize/2f+ position.y), Color.red);
+            Debug.DrawLine(new Vector3(-_chunkSize/2f+ position.x, 0, -_chunkSize/2f+ position.y), new Vector3(-_chunkSize/2f+ position.x, 0, _chunkSize/2f+ position.y), Color.red);
+            Debug.DrawLine(new Vector3(-_chunkSize/2f+ position.x, 0, -_chunkSize/2f+ position.y), new Vector3(-_chunkSize/2f+ position.x, _chunkSize/2f, -_chunkSize/2f+ position.y), Color.red);
+
+            
+            Debug.DrawLine(new Vector3(_chunkSize/2f+ position.x, _chunkSize/2f, _chunkSize/2f+ position.y), new Vector3(_chunkSize/2f+ position.x, 0, _chunkSize/2f+ position.y), Color.red);
+            Debug.DrawLine(new Vector3(_chunkSize/2f+ position.x, _chunkSize/2f, _chunkSize/2f+ position.y), new Vector3(-_chunkSize/2f+ position.x, _chunkSize/2f, _chunkSize/2+ position.y), Color.red);
+            Debug.DrawLine(new Vector3(_chunkSize/2f+ position.x, _chunkSize/2f, _chunkSize/2f+ position.y), new Vector3(_chunkSize/2f+ position.x, _chunkSize/2f, -_chunkSize/2f+ position.y), Color.red);
+            
+            Debug.DrawLine(new Vector3(_chunkSize/2f+ position.x, 0, _chunkSize/2f+ position.y), new Vector3(-_chunkSize/2f+ position.x, 0, _chunkSize/2f+ position.y), Color.red);
+            Debug.DrawLine(new Vector3(_chunkSize/2f+ position.x, 0, _chunkSize/2f+ position.y), new Vector3(_chunkSize/2f+ position.x, 0, -_chunkSize/2f+ position.y), Color.red);
+            
+            Debug.DrawLine(new Vector3(-_chunkSize/2f+ position.x, 0, _chunkSize/2f+ position.y), new Vector3(-_chunkSize/2f+ position.x, _chunkSize/2f, _chunkSize/2f+ position.y), Color.red);
+            Debug.DrawLine(new Vector3(_chunkSize/2f+ position.x, 0, -_chunkSize/2f+ position.y), new Vector3(_chunkSize/2f+ position.x, _chunkSize/2f, -_chunkSize/2f+ position.y), Color.red);
+        }
         public void SetVisible(bool visible)
         {
             _meshObject.SetActive(visible);

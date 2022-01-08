@@ -88,106 +88,106 @@ public static class Noise
                 }
             }
         }
-        
-        //Generating railroad
-        List<float> roadHeights = new List<float>();
-        float[,] heightMapOffsets = new float[mapWidth, mapHeight];
-        
-        if (!railRoadData.Turn)
-        {
-            for (int y = 0; y < mapHeight; y++)
-            {
-                roadHeights.Add(noiseMap[y, railRoadData.RailStart]);
-            }
-        }
-        else
-        {
-            for (int y = 0; y < mapHeight - railRoadData.TurnDistance + railRoadData.Width/2; y++)
-            {
-                roadHeights.Add(noiseMap[y, railRoadData.RailStart]);
-            }
-            
-            for (int x = 0; x < railRoadData.RailStart  + railRoadData.Width/2; x++)
-            {
-                roadHeights.Add(noiseMap[railRoadData.RailStart, x]);
-            }
-        }
 
-        float average = roadHeights.Average();
-        for (int y = 0; y < roadHeights.Count  && (!railRoadData.Turn || y < mapHeight - railRoadData.TurnDistance  + railRoadData.Width/2); y++)
-        {
-            float averageDistance = roadHeights[y] - average;
-            for (int x = 0; x < railRoadData.Width; x++)
-            {
-                float newHeight;
-                int flatOffset = Mathf.CeilToInt((railRoadData.Width - railRoadData.FlatSize) / 2f);
-                float middleHeight = roadHeights[y] - averageDistance * railRoadData.Normalization;
-                float middleDistance = noiseMap[y, x + (railRoadData.RailStart) - railRoadData.Width/2] - middleHeight;
-                if (x < flatOffset)
-                {
-                    newHeight = noiseMap[y, x + (railRoadData.RailStart) - railRoadData.Width/2] - middleDistance*x/flatOffset;
-                }
-                else if (x < flatOffset + railRoadData.FlatSize)
-                {
-                    newHeight = middleHeight;
-                }
-                else
-                {
-                    newHeight = noiseMap[y, x + (railRoadData.RailStart) - railRoadData.Width/2] - (middleDistance - middleDistance*(x-flatOffset-railRoadData.FlatSize)/flatOffset);
-                }
-                heightMapOffsets[y, x + (railRoadData.RailStart) - railRoadData.Width/2] = newHeight - noiseMap[y, x + (railRoadData.RailStart) - railRoadData.Width/2];
-            }
-        }
-        
-        roadHeights.Clear();
-        if (railRoadData.Turn)
-        {
-            for (int x = 0; x < railRoadData.RailStart  + railRoadData.Width/2; x++)
-            {
-                roadHeights.Add(noiseMap[mapWidth - railRoadData.TurnDistance, x]);
-            }
-            
-            for (int x = 0; x < railRoadData.RailStart  + railRoadData.Width/2; x++)
-            {
-                
-                float averageDistance = roadHeights[x] - average;
-                int yRailStart = mapHeight - railRoadData.TurnDistance;
-                for (int y = 0; y < railRoadData.Width; y++)
-                {
-                    float newHeight;
-                    int flatOffset = Mathf.CeilToInt((railRoadData.Width - railRoadData.FlatSize) / 2f);
-                    float middleHeight = roadHeights[x] - averageDistance * railRoadData.Normalization;
-                    float middleDistance = noiseMap[y + yRailStart - railRoadData.Width/2, x] - middleHeight;
-                    if (y < flatOffset)
-                    {
-                        newHeight = noiseMap[y + yRailStart - railRoadData.Width/2, x] - middleDistance*y/flatOffset;
-                    }
-                    else if (y < flatOffset + railRoadData.FlatSize)
-                    {
-                        newHeight = middleHeight;
-                    }
-                    else
-                    {
-                        newHeight = noiseMap[y + yRailStart - railRoadData.Width/2, x] - (middleDistance - middleDistance*(y-flatOffset-railRoadData.FlatSize)/flatOffset);
-                    }
-                    
-                    bool alreadyWritten = heightMapOffsets[y + yRailStart - railRoadData.Width / 2, x] != 0;
-                    heightMapOffsets[y + yRailStart - railRoadData.Width/2, x] += newHeight - noiseMap[y + yRailStart - railRoadData.Width/2, x];
-                    if (alreadyWritten)
-                    {
-                        heightMapOffsets[y + yRailStart - railRoadData.Width / 2, x] /= 2;
-                    }
-                }
-            }
-        }
-
-        for (int x = 0; x < mapHeight; x++)
-        {
-            for (int y = 0; y < mapWidth; y++)
-            {
-                noiseMap[x, y] += heightMapOffsets[x, y];
-            }
-        }
+        // //Generating railroad
+        // List<float> roadHeights = new List<float>();
+        // float[,] heightMapOffsets = new float[mapWidth, mapHeight];
+        //
+        // if (!railRoadData.Turn)
+        // {
+        //     for (int y = 0; y < mapHeight; y++)
+        //     {
+        //         roadHeights.Add(noiseMap[y, railRoadData.RailStart]);
+        //     }
+        // }
+        // else
+        // {
+        //     for (int y = 0; y < mapHeight - railRoadData.TurnDistance + railRoadData.Width/2; y++)
+        //     {
+        //         roadHeights.Add(noiseMap[y, railRoadData.RailStart]);
+        //     }
+        //     
+        //     for (int x = 0; x < railRoadData.RailStart  + railRoadData.Width/2; x++)
+        //     {
+        //         roadHeights.Add(noiseMap[railRoadData.RailStart, x]);
+        //     }
+        // }
+        //
+        // float average = roadHeights.Average();
+        // for (int y = 0; y < roadHeights.Count  && (!railRoadData.Turn || y < mapHeight - railRoadData.TurnDistance  + railRoadData.Width/2); y++)
+        // {
+        //     float averageDistance = roadHeights[y] - average;
+        //     for (int x = 0; x < railRoadData.Width; x++)
+        //     {
+        //         float newHeight;
+        //         int flatOffset = Mathf.CeilToInt((railRoadData.Width - railRoadData.FlatSize) / 2f);
+        //         float middleHeight = roadHeights[y] - averageDistance * railRoadData.Normalization;
+        //         float middleDistance = noiseMap[y, x + (railRoadData.RailStart) - railRoadData.Width/2] - middleHeight;
+        //         if (x < flatOffset)
+        //         {
+        //             newHeight = noiseMap[y, x + (railRoadData.RailStart) - railRoadData.Width/2] - middleDistance*x/flatOffset;
+        //         }
+        //         else if (x < flatOffset + railRoadData.FlatSize)
+        //         {
+        //             newHeight = middleHeight;
+        //         }
+        //         else
+        //         {
+        //             newHeight = noiseMap[y, x + (railRoadData.RailStart) - railRoadData.Width/2] - (middleDistance - middleDistance*(x-flatOffset-railRoadData.FlatSize)/flatOffset);
+        //         }
+        //         heightMapOffsets[y, x + (railRoadData.RailStart) - railRoadData.Width/2] = newHeight - noiseMap[y, x + (railRoadData.RailStart) - railRoadData.Width/2];
+        //     }
+        // }
+        //
+        // roadHeights.Clear();
+        // if (railRoadData.Turn)
+        // {
+        //     for (int x = 0; x < railRoadData.RailStart  + railRoadData.Width/2; x++)
+        //     {
+        //         roadHeights.Add(noiseMap[mapWidth - railRoadData.TurnDistance, x]);
+        //     }
+        //     
+        //     for (int x = 0; x < railRoadData.RailStart  + railRoadData.Width/2; x++)
+        //     {
+        //         
+        //         float averageDistance = roadHeights[x] - average;
+        //         int yRailStart = mapHeight - railRoadData.TurnDistance;
+        //         for (int y = 0; y < railRoadData.Width; y++)
+        //         {
+        //             float newHeight;
+        //             int flatOffset = Mathf.CeilToInt((railRoadData.Width - railRoadData.FlatSize) / 2f);
+        //             float middleHeight = roadHeights[x] - averageDistance * railRoadData.Normalization;
+        //             float middleDistance = noiseMap[y + yRailStart - railRoadData.Width/2, x] - middleHeight;
+        //             if (y < flatOffset)
+        //             {
+        //                 newHeight = noiseMap[y + yRailStart - railRoadData.Width/2, x] - middleDistance*y/flatOffset;
+        //             }
+        //             else if (y < flatOffset + railRoadData.FlatSize)
+        //             {
+        //                 newHeight = middleHeight;
+        //             }
+        //             else
+        //             {
+        //                 newHeight = noiseMap[y + yRailStart - railRoadData.Width/2, x] - (middleDistance - middleDistance*(y-flatOffset-railRoadData.FlatSize)/flatOffset);
+        //             }
+        //             
+        //             bool alreadyWritten = heightMapOffsets[y + yRailStart - railRoadData.Width / 2, x] != 0;
+        //             heightMapOffsets[y + yRailStart - railRoadData.Width/2, x] += newHeight - noiseMap[y + yRailStart - railRoadData.Width/2, x];
+        //             if (alreadyWritten)
+        //             {
+        //                 heightMapOffsets[y + yRailStart - railRoadData.Width / 2, x] /= 2;
+        //             }
+        //         }
+        //     }
+        // }
+        //
+        // for (int x = 0; x < mapHeight; x++)
+        // {
+        //     for (int y = 0; y < mapWidth; y++)
+        //     {
+        //         noiseMap[x, y] += heightMapOffsets[x, y];
+        //     }
+        // }
         
         return noiseMap;
     }

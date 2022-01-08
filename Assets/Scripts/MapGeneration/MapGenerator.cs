@@ -22,6 +22,10 @@ public class MapGenerator : MonoBehaviour
     public TreeNoise TreeNoise;
     public RailRoadData RailRoadData;
 
+    private bool railsNotDone;
+
+    public GameObject railRoadPrefab;
+
     public bool makeTrainPath;
     
     public const int MapChunkSize = 241;
@@ -160,6 +164,37 @@ public class MapGenerator : MonoBehaviour
             {
                 MapThreadInfo<TreeData> threadInfo = _treeDataThreadInfoQueue.Dequeue();
                 threadInfo.Callback(threadInfo.Parameter);
+            }
+        }
+
+        if (EndlessTerrain.Current.isDone && makeTrainPath && railsNotDone)
+        {
+            Debug.Log("here");
+            railsNotDone = true;
+        
+            if (!RailRoadData.Turn)
+            {
+                for (int y = 0; y < MapChunkSize; y++)
+                {
+                    int x = RailRoadData.RailStart;
+                    Instantiate(railRoadPrefab);
+                    railRoadPrefab.transform.position = new Vector3(x, 0, y);
+                }
+            }
+            else
+            {
+                for (int y = 0; y < MapChunkSize - RailRoadData.TurnDistance + RailRoadData.Width/2; y++)
+                {
+                    int x = RailRoadData.RailStart;
+                    Instantiate(railRoadPrefab);
+                    railRoadPrefab.transform.position = new Vector3(x, 0, y);
+                }
+            
+                for (int x = 0; x < RailRoadData.RailStart  + RailRoadData.Width/2; x++)
+                {
+                    int y = RailRoadData.TurnDistance;
+                    Instantiate(railRoadPrefab);
+                    railRoadPrefab.transform.position = new Vector3(x, 0, y);                }
             }
         }
     }
